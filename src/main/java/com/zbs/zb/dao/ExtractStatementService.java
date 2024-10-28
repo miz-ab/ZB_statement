@@ -5,7 +5,6 @@ import com.zbs.zb.db_model.OracleStatementDetail;
 import com.zbs.zb.db_model.StatementDetail;
 import com.zbs.zb.model.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -14,6 +13,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
+
+import static com.zbs.zb.constants.Constants.CHAR_NUMERIC;
 
 
 @Service
@@ -121,7 +122,7 @@ public class ExtractStatementService {
 
     public String generate_trx_code(){
         int length = 6;
-           String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+           String CHARACTERS = CHAR_NUMERIC;
            SecureRandom RANDOM = new SecureRandom();
             StringBuilder sb = new StringBuilder(length);
             for (int i = 0; i < length; i++) {

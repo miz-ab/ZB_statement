@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import static com.zbs.zb.constants.Constants.EXTERNAL_HOST_ADDRESS;
+
 @Service
 //@EnableRetry
 public class ServiceCaller {
@@ -25,7 +27,7 @@ public class ServiceCaller {
 
     public ServiceCaller() {
         restClient = RestClient.builder()
-                .baseUrl("http://127.0.0.1:3012")
+                .baseUrl(EXTERNAL_HOST_ADDRESS)
                 .build();
     }
 
@@ -53,17 +55,5 @@ public class ServiceCaller {
                 .retrieve()
                 .body(Post.class);
     }
-
-
-    /*public Statement get_statement(){
-        String url = "http://127.0.0.1:3000/get-statement";
-
-        RestTemplate restTemplate = new RestTemplate();
-        Statement statement = restTemplate.getForObject(url, Statement.class);
-
-        return statement;
-    }
-    */
-
 
 }

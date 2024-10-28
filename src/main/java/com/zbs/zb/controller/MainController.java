@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 
 
-@CrossOrigin(origins = {"http://localhost:8082", "http://127.0.0.1:3012", "http://192.168.0.243:3000"})
+@CrossOrigin(origins = {"http://localhost:8082", "http://127.0.0.1:3012"})
 @RestController
 @RequestMapping("/api")
 public class MainController {
@@ -49,7 +49,6 @@ public class MainController {
             //load date and last statement id
 
             int status = get_date_comparison_value(s.getSTATEMENT_PERIOD());
-            System.out.println("status code " + status);
             if(status == 1){
                 /* add statement line only */
                 List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
