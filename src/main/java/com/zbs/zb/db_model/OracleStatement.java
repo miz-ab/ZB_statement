@@ -18,4 +18,5 @@ public class OracleStatement {
     private Double CONTROL_END_BALANCE;
     private String RECORD_STATUS_FLAG;
     private String CURRENCY_CODE;
+    private String ORG_ID;
 }

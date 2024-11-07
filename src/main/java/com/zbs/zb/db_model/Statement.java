@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @AllArgsConstructor
-//@NoArgsConstructor
+@NoArgsConstructor
 public class Statement {
 
     private String UID;

@@ -14,7 +14,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.IntStream;
 
-import static com.zbs.zb.constants.Constants.CHAR_NUMERIC;
+import static com.zbs.zb.constants.Constants.*;
 
 
 @Service
@@ -23,7 +23,7 @@ public class ExtractStatementService {
     @Autowired
     private StatementService statementService;
 
-    public com.zbs.zb.db_model.Statement get_statement(Statement s){
+   public com.zbs.zb.db_model.Statement get_statement(Statement s){
         UUID statement_uuid = UUID.randomUUID();
         return new
                 com.zbs.zb.db_model.Statement(statement_uuid.toString(),
@@ -38,6 +38,7 @@ public class ExtractStatementService {
                 s.getOPENING_BALANCE(),
                 s.getCLOSING_BALANCE());
     }
+
 
     public List<StatementDetail> get_statement_detail(Statement s){
         List<StatementDetail> StatementDetailList = new ArrayList<>();
@@ -70,6 +71,8 @@ public class ExtractStatementService {
         return StatementDetailList;
     }
 
+
+
    public List<OracleStatementDetail> get_oracle_statement_detail(Statement s){
 
        String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
@@ -87,14 +90,19 @@ public class ExtractStatementService {
                    db_id,
                    String.valueOf(new_line_no),
                    s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_DATE(),
-                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getNARRATIVE(),
+                   creditOrDebit(s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getCREDIT_AMOUNT()),
+                   //s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getNARRATIVE(),
                    s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_DATE(),
                    s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_DESC(),
-                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getCREDIT_AMOUNT(),
+                   //s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getCREDIT_AMOUNT(),
+                   getCreditOrDebitAmount(s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getCREDIT_AMOUNT(), s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getDEBIT_AMOUNT()),
                    s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getACCOUNT_CCY(),
-                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_REF_NO(),
+                   //s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_REF_NO(),
+                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getNARRATIVE(),
                    generate_random_id(),
-                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_DATE()
+                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_DATE(),
+                   s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getTRANSACTION_REF_NO(),
+                   ETB_CCY
            );
            oracleStatementDetailList.add(oracleStatementDetail);
        }
@@ -115,8 +123,9 @@ public class ExtractStatementService {
                "Abinet Branch",
                s.getOPENING_BALANCE(),
                s.getCLOSING_BALANCE(),
-               s.getSTATUS().substring(0,1),
-               s.getACCOUNT_CCY()
+               RECORD_STATUS_FLAG,
+               s.getACCOUNT_CCY(),
+               ORG_ID
        );
    }
 
@@ -135,5 +144,19 @@ public class ExtractStatementService {
     public Integer generate_random_id(){
         Random random = new Random();
         return   1000 + random.nextInt(9000);
+    }
+
+    private String creditOrDebit(Double creditAmount){
+       if(creditAmount != null){
+           return CREDIT_VALUE_CODE;
+       }
+       return DEBIT_VALUE_CODE;
+    }
+
+    private Double getCreditOrDebitAmount(Double creditAmount, Double debitAmount){
+       if(creditAmount != null){
+           return creditAmount;
+       }
+       return debitAmount;
     }
 }

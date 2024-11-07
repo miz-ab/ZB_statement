@@ -21,4 +21,7 @@ public class OracleStatementDetail {
     private String BANK_TRX_NUMBER;
     private Integer CREATED_BY ;
     private String CREATION_DATE;
+
+    private String ATTRIBUTE2;
+    private String BANK_ACCT_CURRENCY_CODE;
 }

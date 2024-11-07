@@ -97,8 +97,8 @@ public class StatementService {
 
     public String insertStatementOracleDB(OracleStatement oracleStatement){
         String sql = "INSERT INTO CE_STATEMENT_HEADERS_INT (STATEMENT_NUMBER,BANK_ACCOUNT_NUM, STATEMENT_DATE, BANK_NAME, BANK_BRANCH_NAME" +
-                ", CONTROL_BEGIN_BALANCE, CONTROL_END_BALANCE, RECORD_STATUS_FLAG, CURRENCY_CODE) VALUES " +
-                "(?,?,TO_DATE(?, 'YYYY-MM-dd'),?,?,?,?,?,?)";
+                ", CONTROL_BEGIN_BALANCE, CONTROL_END_BALANCE, RECORD_STATUS_FLAG, CURRENCY_CODE, ORG_ID) VALUES " +
+                "(?,?,TO_DATE(?, 'YYYY-MM-dd'),?,?,?,?,?,?,?)";
 
         try{
 
@@ -111,7 +111,8 @@ public class StatementService {
                     oracleStatement.getCONTROL_BEGIN_BALANCE(),
                     oracleStatement.getCONTROL_END_BALANCE(),
                     oracleStatement.getRECORD_STATUS_FLAG(),
-                    oracleStatement.getCURRENCY_CODE()
+                    oracleStatement.getCURRENCY_CODE(),
+                    oracleStatement.getORG_ID()
                     );
 
             System.out.println("row aff " + rowsAffected);
@@ -133,8 +134,8 @@ public class StatementService {
 
     public String insertStatementDetailOracleDB(OracleStatementDetail oracleStatementDetail){
         String sql = "INSERT INTO CE_STATEMENT_LINES_INTERFACE (BANK_ACCOUNT_NUM, STATEMENT_NUMBER, LINE_NUMBER, TRX_DATE, " +
-                "TRX_CODE, EFFECTIVE_DATE, TRX_TEXT, AMOUNT, CURRENCY_CODE, BANK_TRX_NUMBER, CREATED_BY, CREATION_DATE) VALUES (" +
-                "?,?,?,TO_DATE(?, 'YYYY-MM-dd'),?,TO_DATE(?, 'YYYY-MM-dd'),?,?,?,?,?,TO_DATE(?, 'YYYY-MM-dd'))";
+                "TRX_CODE, EFFECTIVE_DATE, TRX_TEXT, AMOUNT, CURRENCY_CODE, BANK_TRX_NUMBER, CREATED_BY, CREATION_DATE, ATTRIBUTE2, BANK_ACCT_CURRENCY_CODE) VALUES (" +
+                "?,?,?,TO_DATE(?, 'YYYY-MM-dd'),?,TO_DATE(?, 'YYYY-MM-dd'),?,?,?,?,?,TO_DATE(?, 'YYYY-MM-dd'),?,?)";
 
         try{
             int rowsAffected = secondaryJdbcTemplate.update(sql,
@@ -149,7 +150,9 @@ public class StatementService {
                     oracleStatementDetail.getCURRENCY_CODE(),
                     oracleStatementDetail.getBANK_TRX_NUMBER(),
                     oracleStatementDetail.getCREATED_BY(),
-                    oracleStatementDetail.getCREATION_DATE()
+                    oracleStatementDetail.getCREATION_DATE(),
+                    oracleStatementDetail.getATTRIBUTE2(),
+                    oracleStatementDetail.getBANK_ACCT_CURRENCY_CODE()
             );
 
             System.out.println("row aff " + rowsAffected);
@@ -182,8 +185,10 @@ public class StatementService {
 
             return result.get();
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println(e);
         }
+
+        System.out.println("statement number and last in date " + result.get());
         return  result.get();
     }
 
@@ -265,7 +270,9 @@ public class StatementService {
                 (api_local_date_format.getDayOfMonth() == 1)){
             return 2;
         }
-        return 1;
+        return 0;
     }
 
 }
+
+

@@ -31,24 +31,17 @@ public class MainController {
     /*
     *
     * */
-    //@PostMapping("/post-statement")
-    @Scheduled(fixedRate = 60000)
-    public ResponseEntity<Map<String, Object>> SavePostDataService(){
+    @PostMapping("/post-statement")
+    //@Scheduled(fixedRate = 60000)
+    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody Statement s){
 
         try{
             Map<String, Object> response = new HashMap<>();
-            Statement s = serviceCaller.getStatement();
-
-            System.out.println("statement from service " + s);
-
-            /*
-            * insert statement to oracle db based on some condition
-            *
-            * */
-
-            //load date and last statement id
+            //Statement s = serviceCaller.getStatement();
 
             int status = get_date_comparison_value(s.getSTATEMENT_PERIOD());
+            System.out.println("status code " + status);
+            System.out.println("statement period " + s.getSTATEMENT_PERIOD());
             if(status == 1){
                 /* add statement line only */
                 List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
@@ -67,9 +60,9 @@ public class MainController {
 
             }else if(status == 2){
                 /* add both statement header and line and statement and statement detail list */
-               OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(s);
-               statementService.insertStatementOracleDB(oracleStatement_);
-               List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
+                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(s);
+                statementService.insertStatementOracleDB(oracleStatement_);
+                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
 
                 for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList){
                     statementService.insertStatementDetailOracleDB(oracleStatementDetail);
@@ -91,7 +84,8 @@ public class MainController {
             }else{
                 response.put("statement_detail", "Invalid Data");
             }
-          return new ResponseEntity<>(response, HttpStatus.CREATED);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
 
         } catch (Exception e) {
             System.out.println("err " + e.getMessage());
@@ -102,7 +96,7 @@ public class MainController {
    private int get_date_comparison_value(String api_date){
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_date = db_date_val.split("@")[1];
-
+        System.out.println("db date " + db_date);
         return statementService.compareDate(db_date, api_date);
    }
 
