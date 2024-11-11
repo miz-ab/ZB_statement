@@ -240,11 +240,11 @@ public class StatementService {
         * */
 
         if(db_date.equals(api_date)){
-            return 0;
+            return BOTH_DATES_ARE_EQUAL;
         }
 
         if(api_local_date_format.getYear() < db_local_date_format.getYear()){
-            return 3;
+            return INVALID_DATE;
         }
 
         /*
@@ -252,7 +252,7 @@ public class StatementService {
         * */
 
         if((api_local_date_format.getYear() == db_local_date_format.getYear()) && (db_local_date_format.getMonthValue() < api_local_date_format.getMonthValue())){
-            return 2;
+            return DAY_MONTH_DIFFERENCE;
         }
 
         /*
@@ -260,7 +260,7 @@ public class StatementService {
         * */
 
         if((api_local_date_format.getMonthValue() == db_local_date_format.getMonthValue()) && (api_local_date_format.getDayOfMonth() < db_local_date_format.getDayOfMonth())){
-            return 1;
+            return DAY_DIFFERENCE;
         }
 
         /*
@@ -270,9 +270,9 @@ public class StatementService {
 
         if((db_local_date_format.plusMonths(1).getMonth() == api_local_date_format.getMonth()) &&
                 (api_local_date_format.getDayOfMonth() == 1)){
-            return 2;
+            return DAY_MONTH_DIFFERENCE;
         }
-        return 0;
+        return INVALID_DATE;
     }
 
     public int compareDate_(String db_date, String api_date){

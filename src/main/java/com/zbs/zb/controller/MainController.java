@@ -97,7 +97,6 @@ public class MainController {
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_date = db_date_val.split("@")[1];
         int r = statementService.compareDate_(db_date, api_date);
-        System.out.println("date com res " + r);
         return statementService.compareDate_(db_date, api_date);
    }
 
