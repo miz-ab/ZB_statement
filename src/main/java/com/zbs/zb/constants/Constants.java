@@ -11,4 +11,10 @@ public class Constants {
     public static final String ORG_ID = "101";
     public static final String RECORD_STATUS_FLAG = "T";
 
+    public static final Integer BOTH_DATES_ARE_EQUAL = 0;
+    public static final Integer DAY_DIFFERENCE = 1;
+    public static final Integer DAY_MONTH_DIFFERENCE = 2;
+    public static final Integer INVALID_DATE = 3;
+
+
 }
