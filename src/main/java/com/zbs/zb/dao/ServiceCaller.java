@@ -19,7 +19,8 @@ import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import static com.zbs.zb.constants.Constants.EXTERNAL_HOST_ADDRESS;
+import static com.zbs.zb.constants.Constants.*;
+
 
 @Service
 //@EnableRetry
@@ -28,7 +29,7 @@ public class ServiceCaller {
     private final RestClient restClient;
 
     public ServiceCaller() {
-        String basicAuth = "Basic " + Base64.getEncoder().encodeToString(("username:password").getBytes());
+        String basicAuth = "Basic " + Base64.getEncoder().encodeToString((HOST_USERNAME +":" +HOST_PASSWORD).getBytes());
         restClient = RestClient.builder()
                 .baseUrl(EXTERNAL_HOST_ADDRESS)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, basicAuth)

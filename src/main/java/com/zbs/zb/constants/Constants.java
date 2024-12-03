@@ -16,5 +16,9 @@ public class Constants {
     public static final Integer DAY_MONTH_DIFFERENCE = 2;
     public static final Integer INVALID_DATE = 3;
 
+    //USE ENV VARIABLE FOR TESTING / PROD
+    public static final String HOST_USERNAME = "icl12";
+    public static final String HOST_PASSWORD = "test";
+
 
 }
