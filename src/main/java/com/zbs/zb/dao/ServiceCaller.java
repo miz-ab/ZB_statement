@@ -4,6 +4,7 @@ package com.zbs.zb.dao;
 import com.zbs.zb.db_model.Post;
 import com.zbs.zb.model.Statement;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -26,8 +28,10 @@ public class ServiceCaller {
     private final RestClient restClient;
 
     public ServiceCaller() {
+        String basicAuth = "Basic " + Base64.getEncoder().encodeToString(("username:password").getBytes());
         restClient = RestClient.builder()
                 .baseUrl(EXTERNAL_HOST_ADDRESS)
+                .defaultHeader(HttpHeaders.AUTHORIZATION, basicAuth)
                 .build();
     }
 
@@ -55,5 +59,7 @@ public class ServiceCaller {
                 .retrieve()
                 .body(Post.class);
     }
+
+
 
 }
