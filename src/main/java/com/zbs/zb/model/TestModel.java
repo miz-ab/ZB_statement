@@ -1,26 +1,19 @@
 package com.zbs.zb.model;
 
 
-//import lombok.AllArgsConstructor;
-//import lombok.Data;
-//import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-//@Data
-//@AllArgsConstructor
-//@NoArgsConstructor
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TestModel {
-
-    String message;
-
-    public TestModel(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+    @JsonProperty("ACCOUNT_NUMBER")
+    private String ACCOUNT_NUMBER;
+    @JsonProperty("START_DATE")
+    private String START_DATE;
+    @JsonProperty("END_DATE")
+    private String END_DATE;
 }
