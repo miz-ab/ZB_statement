@@ -7,6 +7,8 @@ import com.zbs.zb.db_model.OracleStatement;
 import com.zbs.zb.db_model.OracleStatementDetail;
 import com.zbs.zb.db_model.StatementDetail;
 import com.zbs.zb.model.Statement;
+import com.zbs.zb.model.T;
+import com.zbs.zb.model.TestModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -91,6 +93,22 @@ public class MainController {
             System.out.println("err " + e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/aa")
+    public String getreq(@RequestBody T res){
+        System.out.println("res inside controller " + res);
+        System.out.println("aa called");
+        String res_ = "";
+        try{
+            res_ = serviceCaller.callStatement(res);
+            System.out.println("response ");
+            System.out.println(res_);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        return res_;
     }
 
    private int get_date_comparison_value(String api_date){

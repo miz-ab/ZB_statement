@@ -3,6 +3,8 @@ package com.zbs.zb.dao;
 
 import com.zbs.zb.db_model.Post;
 import com.zbs.zb.model.Statement;
+import com.zbs.zb.model.T;
+import com.zbs.zb.model.TestModel;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -59,6 +61,17 @@ public class ServiceCaller {
                 .body(post)
                 .retrieve()
                 .body(Post.class);
+    }
+
+    public String callStatement(T req){
+        System.out.println("res " + req);
+        return restClient.post()
+                .uri("/accountBalance")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(req)
+                .retrieve()
+                .body(String.class);
     }
 
 

@@ -2,7 +2,7 @@ package com.zbs.zb.constants;
 
 public class Constants {
 
-    public static final String EXTERNAL_HOST_ADDRESS = "http://127.0.0.1:3012";
+    public static final String EXTERNAL_HOST_ADDRESS = "https://devapi.zemenbank.com/statement-service";
     public static final String EXTERNAL_HOST_ADDRESS_2 = "http://127.0.0.1:3012";
     public static final String FIRST_DAY_OF_THE_MONTH = "01";
     public static final String CHAR_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -18,8 +18,8 @@ public class Constants {
     public static final Integer INVALID_DATE = 3;
 
     //USE ENV VARIABLE FOR TESTING / PROD
-    public static final String HOST_USERNAME = "icl12";
-    public static final String HOST_PASSWORD = "test";
+    public static final String HOST_USERNAME = "icl";
+    public static final String HOST_PASSWORD = "P@ssw0rd";
 
 
 }
