@@ -2,9 +2,7 @@ package com.zbs.zb.dao;
 
 
 import com.zbs.zb.db_model.Post;
-import com.zbs.zb.model.Statement;
-import com.zbs.zb.model.T;
-import com.zbs.zb.model.TestModel;
+import com.zbs.zb.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
@@ -75,6 +73,17 @@ public class ServiceCaller {
                 .body(req)
                 .retrieve()
                 .body(String.class);
+    }
+
+    public AccountBalanceResponse  bankStatementBalance(AccountBalance t){
+        log.info("bank statement request class {}", t);
+        return restClient.post()
+                .uri("/accountBalance")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(t)
+                .retrieve()
+                .body(AccountBalanceResponse.class);
     }
 
 

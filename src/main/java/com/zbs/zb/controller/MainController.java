@@ -6,15 +6,15 @@ import com.zbs.zb.dao.StatementService;
 import com.zbs.zb.db_model.OracleStatement;
 import com.zbs.zb.db_model.OracleStatementDetail;
 import com.zbs.zb.db_model.StatementDetail;
-import com.zbs.zb.model.Statement;
-import com.zbs.zb.model.T;
-import com.zbs.zb.model.TestModel;
+import com.zbs.zb.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.util.*;
 
 
@@ -109,6 +109,18 @@ public class MainController {
         }
 
         return res_;
+    }
+
+    @PostMapping("/get-balance")
+    public AccountBalanceResponse getBalance(@RequestBody AccountBalance b){
+        try{
+            AccountBalanceResponse aa = serviceCaller.bankStatementBalance(b);
+            log.info("res {}", aa.getSTATUS());
+            return aa;
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return null;
     }
 
    private int get_date_comparison_value(String api_date){
