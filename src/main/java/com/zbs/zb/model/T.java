@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class T {
 
-    //@JsonProperty("ACCOUNT_NUMBER")
+    @JsonProperty("ACCOUNT_NUMBER")
     private String ACCOUNT_NUMBER;
 
 }

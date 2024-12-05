@@ -5,6 +5,7 @@ import com.zbs.zb.db_model.Post;
 import com.zbs.zb.model.Statement;
 import com.zbs.zb.model.T;
 import com.zbs.zb.model.TestModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import java.util.List;
 import static com.zbs.zb.constants.Constants.*;
 
 
+@Slf4j
 @Service
 //@EnableRetry
 public class ServiceCaller {
@@ -32,6 +34,7 @@ public class ServiceCaller {
 
     public ServiceCaller() {
         String basicAuth = "Basic " + Base64.getEncoder().encodeToString((HOST_USERNAME +":" +HOST_PASSWORD).getBytes());
+        log.info("basic auth {}", basicAuth);
         restClient = RestClient.builder()
                 .baseUrl(EXTERNAL_HOST_ADDRESS)
                 .defaultHeader(HttpHeaders.AUTHORIZATION, basicAuth)
@@ -64,7 +67,7 @@ public class ServiceCaller {
     }
 
     public String callStatement(T req){
-        System.out.println("res " + req);
+        log.info("request var {}", req);
         return restClient.post()
                 .uri("/accountBalance")
                 .contentType(MediaType.APPLICATION_JSON)

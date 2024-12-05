@@ -9,6 +9,7 @@ import com.zbs.zb.db_model.StatementDetail;
 import com.zbs.zb.model.Statement;
 import com.zbs.zb.model.T;
 import com.zbs.zb.model.TestModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.*;
 
 
+@Slf4j
 @CrossOrigin(origins = {"http://localhost:8082", "http://127.0.0.1:3012"})
 @RestController
 @RequestMapping("/api")
@@ -97,15 +99,13 @@ public class MainController {
 
     @PostMapping("/aa")
     public String getreq(@RequestBody T res){
-        System.out.println("res inside controller " + res);
-        System.out.println("aa called");
+        log.info("passed value {} ", res);
         String res_ = "";
         try{
             res_ = serviceCaller.callStatement(res);
-            System.out.println("response ");
             System.out.println(res_);
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
 
         return res_;
