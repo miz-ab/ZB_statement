@@ -86,6 +86,16 @@ public class ServiceCaller {
                 .body(AccountBalanceResponse.class);
     }
 
+    public Statement bankStatement(StatementRequest t){
+        log.info("statement request {}", t);
+        return restClient.post()
+                .uri("/accountStatement")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .body(t)
+                .retrieve()
+                .body(Statement.class);
+    }
 
 
 }

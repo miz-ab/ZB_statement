@@ -30,72 +30,72 @@ public class MainController {
     @Autowired
     private ServiceCaller serviceCaller;
 
-    @Autowired
-    ExtractStatementService extractStatementService;
+//    @Autowired
+//    ExtractStatementService extractStatementService;
     /*
     *
     * */
-    @PostMapping("/post-statement")
-    //@Scheduled(fixedRate = 60000)
-    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody Statement s){
-
-        try{
-            Map<String, Object> response = new HashMap<>();
-            //Statement s = serviceCaller.getStatement();
-
-            int status = get_date_comparison_value(s.getSTATEMENT_PERIOD());
-            System.out.println("status code " + status);
-            System.out.println("statement period " + s.getSTATEMENT_PERIOD());
-            if(status == 1){
-                /* add statement line only */
-                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
-                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
-
-                /* insert to oracle database */
-                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
-                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-                }
-                /* insert to  mysql database */
-                for(StatementDetail statementDetail : statementDetailList) {
-                    statementService.insertStatementDetailData(statementDetail);
-                }
-                response.put("statement_detail", oracleStatementDetailList);
-                response.put("statement created successfully", oracleStatementDetailList.size());
-
-            }else if(status == 2){
-                /* add both statement header and line and statement and statement detail list */
-                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(s);
-                statementService.insertStatementOracleDB(oracleStatement_);
-                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
-
-                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList){
-                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-                }
-                /* insert to mysql database */
-
-                com.zbs.zb.db_model.Statement statement = extractStatementService.get_statement(s);
-                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
-                statementService.insertStatementData(statement);
-
-                for(StatementDetail statementDetail : statementDetailList) {
-                    statementService.insertStatementDetailData(statementDetail);
-                }
-
-                response.put("statement_header", oracleStatement_);
-                response.put("statement_detail", oracleStatementDetailList);
-                response.put("statement created successfully", oracleStatementDetailList.size());
-
-            }else{
-                response.put("statement_detail", "Invalid Data");
-            }
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
-
-
-        } catch (Exception e) {
-            System.out.println("err " + e.getMessage());
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+//    @PostMapping("/post-statement")
+//    //@Scheduled(fixedRate = 60000)
+//    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody Statement s){
+//
+//        try{
+//            Map<String, Object> response = new HashMap<>();
+//            //Statement s = serviceCaller.getStatement();
+//
+//            int status = get_date_comparison_value(s.getSTATEMENT_PERIOD());
+//            System.out.println("status code " + status);
+//            System.out.println("statement period " + s.getSTATEMENT_PERIOD());
+//            if(status == 1){
+//                /* add statement line only */
+//                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
+//                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
+//
+//                /* insert to oracle database */
+//                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
+//                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
+//                }
+//                /* insert to  mysql database */
+//                for(StatementDetail statementDetail : statementDetailList) {
+//                    statementService.insertStatementDetailData(statementDetail);
+//                }
+//                response.put("statement_detail", oracleStatementDetailList);
+//                response.put("statement created successfully", oracleStatementDetailList.size());
+//
+//            }else if(status == 2){
+//                /* add both statement header and line and statement and statement detail list */
+//                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(s);
+//                statementService.insertStatementOracleDB(oracleStatement_);
+//                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
+//
+//                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList){
+//                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
+//                }
+//                /* insert to mysql database */
+//
+//                com.zbs.zb.db_model.Statement statement = extractStatementService.get_statement(s);
+//                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
+//                statementService.insertStatementData(statement);
+//
+//                for(StatementDetail statementDetail : statementDetailList) {
+//                    statementService.insertStatementDetailData(statementDetail);
+//                }
+//
+//                response.put("statement_header", oracleStatement_);
+//                response.put("statement_detail", oracleStatementDetailList);
+//                response.put("statement created successfully", oracleStatementDetailList.size());
+//
+//            }else{
+//                response.put("statement_detail", "Invalid Data");
+//            }
+//            return new ResponseEntity<>(response, HttpStatus.CREATED);
+//
+//
+//        } catch (Exception e) {
+//            System.out.println("err " + e.getMessage());
+//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
+//    }
 
     @PostMapping("/aa")
     public String getreq(@RequestBody T res){
@@ -117,6 +117,16 @@ public class MainController {
             AccountBalanceResponse aa = serviceCaller.bankStatementBalance(b);
             log.info("res {}", aa.getSTATUS());
             return aa;
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return null;
+    }
+
+    @PostMapping("/get-statement-list")
+    public Statement getBankStatement(@RequestBody StatementRequest t){
+        try{
+            return  serviceCaller.bankStatement(t);
         }catch (Exception e){
             log.error(e.getMessage());
         }

@@ -9,5 +9,5 @@ import java.util.List;
 public class StatementDetails {
 
     @JsonProperty("STATEMENT_DETAIL")
-    private List<StatementDetail> STATEMENT_DETAIL;
+    private List<StatementDetail_> STATEMENT_DETAIL;
 }
