@@ -9,11 +9,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import java.time.LocalDate;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.zbs.zb.constants.Constants.*;
 
+@Slf4j
 @Service
 public class StatementService {
 
@@ -195,7 +197,7 @@ public class StatementService {
     }
 
     public String get_statement_interface_line_number(){
-        AtomicReference<String> result = new AtomicReference<>("1");
+        AtomicReference<String> result = new AtomicReference<>("0");
         try{
             String sql = "SELECT MAX(LINE_NUMBER) AS LINE_NUMBER FROM CE_STATEMENT_LINES_INTERFACE";
             //String sql = "SELECT LINE_NUMBER FROM CE_STATEMENT_LINES_INTERFACE ORDER BY TRX_DATE DESC FETCH FIRST 1 ROW ONLY";
@@ -206,8 +208,9 @@ public class StatementService {
             System.out.println(e.getMessage());
         }
         if(result.get() == null){
-            return "1";
+            return "0";
         }
+        log.info("db line no {} ", result.get());
         return result.get();
     }
 
@@ -307,6 +310,8 @@ public class StatementService {
         /*
          * if api date is one month after db date and api day of the month is start day of the month
          * create new statement header record
+         *
+         * add both statement interface header and statement header line
          * */
         if((db_local_date_format.plusMonths(1).getMonth() == api_local_date_format.getMonth()) &&
                 (api_local_date_format.getDayOfMonth() == 1)){

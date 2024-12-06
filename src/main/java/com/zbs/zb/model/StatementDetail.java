@@ -51,18 +51,4 @@ public class StatementDetail {
 
     @JsonProperty("NARRATIVE")
     private String NARRATIVE;
-
-    /*
-
-    "CUSTOMER_NAME": null,
-                "TRANSACTION_REF_NO": "103ICCOETB000001",
-                "OPENING_BALANCE": 0,
-                "CLOSING_BALANCE": 41061.23,
-                "VALUE_DATE": "2023-07-01T00:00:00.000+03:00",
-                "DEBIT_AMOUNT": 0,
-                "CREDIT_AMOUNT": 229.17,
-                "ACCOUNT_CCY": "ETB",
-                "TRANSACTION_DESC": "Interest on CASA - Liquidation",
-                "NARRATIVE": "--103ICCOETB000001 "
-    * */
 }

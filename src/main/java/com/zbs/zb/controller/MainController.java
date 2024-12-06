@@ -14,12 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.util.*;
 
 
 @Slf4j
-@CrossOrigin(origins = {"http://localhost:8082", "http://127.0.0.1:3012"})
+//@CrossOrigin(origins = {"http://localhost:8082", "http://127.0.0.1:3012"})
 @RestController
 @RequestMapping("/api")
 public class MainController {
@@ -30,72 +29,88 @@ public class MainController {
     @Autowired
     private ServiceCaller serviceCaller;
 
-//    @Autowired
-//    ExtractStatementService extractStatementService;
+    @Autowired
+    ExtractStatementService extractStatementService;
     /*
     *
     * */
-//    @PostMapping("/post-statement")
-//    //@Scheduled(fixedRate = 60000)
-//    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody Statement s){
-//
-//        try{
-//            Map<String, Object> response = new HashMap<>();
-//            //Statement s = serviceCaller.getStatement();
-//
-//            int status = get_date_comparison_value(s.getSTATEMENT_PERIOD());
-//            System.out.println("status code " + status);
-//            System.out.println("statement period " + s.getSTATEMENT_PERIOD());
-//            if(status == 1){
-//                /* add statement line only */
-//                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
-//                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
-//
-//                /* insert to oracle database */
-//                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
-//                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-//                }
-//                /* insert to  mysql database */
-//                for(StatementDetail statementDetail : statementDetailList) {
-//                    statementService.insertStatementDetailData(statementDetail);
-//                }
-//                response.put("statement_detail", oracleStatementDetailList);
-//                response.put("statement created successfully", oracleStatementDetailList.size());
-//
-//            }else if(status == 2){
-//                /* add both statement header and line and statement and statement detail list */
-//                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(s);
-//                statementService.insertStatementOracleDB(oracleStatement_);
-//                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(s);
-//
-//                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList){
-//                    statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-//                }
-//                /* insert to mysql database */
-//
-//                com.zbs.zb.db_model.Statement statement = extractStatementService.get_statement(s);
-//                List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
-//                statementService.insertStatementData(statement);
-//
-//                for(StatementDetail statementDetail : statementDetailList) {
-//                    statementService.insertStatementDetailData(statementDetail);
-//                }
-//
-//                response.put("statement_header", oracleStatement_);
-//                response.put("statement_detail", oracleStatementDetailList);
-//                response.put("statement created successfully", oracleStatementDetailList.size());
-//
-//            }else{
-//                response.put("statement_detail", "Invalid Data");
-//            }
-//            return new ResponseEntity<>(response, HttpStatus.CREATED);
-//
-//
-//        } catch (Exception e) {
-//            System.out.println("err " + e.getMessage());
-//            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping("/post-statement")
+    //@Scheduled(fixedRate = 60000)
+    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody StatementRequest s){
+        try{
+            Map<String, Object> response = new HashMap<>();
+            Statement statement_response = serviceCaller.bankStatement(s);
+
+            log.info("response {} ", statement_response);
+
+            /* insert to mysql database */
+
+            /*
+            com.zbs.zb.db_model.Statement statement = extractStatementService.get_statement(statement_response);
+            List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail_for_mysql(statement_response);
+            String return_ = statementService.insertStatementData(statement);
+            log.info("statement {}", statement);
+            log.info("db status code {}", return_);
+
+            for(StatementDetail statementDetail : statementDetailList) {
+                statementService.insertStatementDetailData(statementDetail);
+            }
+            */
+
+            log.info("api date {} ", statement_response.getSTATEMENT_PERIOD());
+            int status = get_date_comparison_value(statement_response.getSTATEMENT_PERIOD());
+            log.info("date status {}", status);
+
+            /*
+            * 2 add both line and header
+            * 1 add only line
+            * */
+
+            if(status == 1){
+                /* add statement line only */
+                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
+                log.info(" oracle statement detail list {} ", oracleStatementDetailList);
+                //List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
+
+                /* insert to oracle database */
+                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
+                    String a = statementService.insertStatementDetailOracleDB(oracleStatementDetail);
+                    log.info("oracle statement detail list DB response {} ", a);
+                }
+
+                response.put("statement_detail", oracleStatementDetailList);
+                response.put("statement created successfully", oracleStatementDetailList.size());
+
+            }else if(status == 2){
+                /* add both statement header and line and statement and statement detail list */
+                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
+                log.info("oracle statement int{} ", oracleStatement_);
+                statementService.insertStatementOracleDB(oracleStatement_);
+                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
+                log.info("detail list oracle {} ", oracleStatementDetailList);
+
+                if(oracleStatementDetailList != null) {
+                    for (OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
+                        String b = statementService.insertStatementDetailOracleDB(oracleStatementDetail);
+                        log.info("detail list DB response interface {} ", b);
+                    }
+                }
+
+                response.put("statement_header", oracleStatement_);
+                response.put("statement_detail", oracleStatementDetailList);
+                response.put("statement created successfully", oracleStatementDetailList.size());
+
+
+            }else{
+                response.put("statement_detail", "Invalid Data");
+            }
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+
+        } catch (Exception e) {
+            System.out.println("err " + e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/aa")
     public String getreq(@RequestBody T res){
@@ -136,8 +151,9 @@ public class MainController {
    private int get_date_comparison_value(String api_date){
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_date = db_date_val.split("@")[1];
-        int r = statementService.compareDate_(db_date, api_date);
-        return statementService.compareDate_(db_date, api_date);
+
+        int r = statementService.compareDate_(db_date, api_date.split(" - ")[0]);
+        return statementService.compareDate_(db_date, api_date.split(" - ")[0]);
    }
 
 }

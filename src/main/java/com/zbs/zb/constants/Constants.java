@@ -8,6 +8,9 @@ public class Constants {
     public static final String CHAR_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static final String CREDIT_VALUE_CODE = "CRE";
     public static final String DEBIT_VALUE_CODE = "DEB";
+    public static final String ABINET_BRANCH_ACCOUNT_NO = "1335110027363010";
+    public static final String ABINET_BRANCH_NAME = "Abinet Branch";
+    public static final String DEFAULT_INST_NO = "222";
     public static final String ETB_CCY = "ETB";
     public static final String ORG_ID = "101";
     public static final String RECORD_STATUS_FLAG = "T";
