@@ -165,7 +165,8 @@ public class ExtractStatementService {
        log.info("db id {}", db_id);
 
        int new_line_no = Integer.parseInt(statementService.get_statement_interface_line_number());
-       log.info("line no {} ", new_line_no);
+       //log.info("line no {} ", new_line_no);
+
 
        List<OracleStatementDetail> oracleStatementDetailList = new ArrayList<>();
 
@@ -176,9 +177,16 @@ public class ExtractStatementService {
         if(s.getSTATEMENT_DETAILS() == null){
             return oracleStatementDetailList;
         }
+        double sum_debit_amt = 0.0;
+        double sum_credit_amt = 0.0;
 
        for(int i = 0; i < s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().size(); i++){
            new_line_no = new_line_no + 1;
+
+           sum_debit_amt = sum_debit_amt + s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getDEBIT_AMOUNT();
+           sum_credit_amt = sum_credit_amt + s.getSTATEMENT_DETAILS().getSTATEMENT_DETAIL().get(i).getCREDIT_AMOUNT();
+
+
            //int new_line_no = Integer.parseInt(statementService.get_statement_interface_line_number()) + 1;
 
            OracleStatementDetail oracleStatementDetail = new OracleStatementDetail(
@@ -205,6 +213,12 @@ public class ExtractStatementService {
            );
            oracleStatementDetailList.add(oracleStatementDetail);
        }
+
+
+        log.info("debit amt {}", sum_debit_amt);
+        log.info("credit amt {}", sum_credit_amt);
+        log.info("opening balance {}", s.getOPENING_BALANCE());
+        log.info("closing balance {}", s.getCLOSING_BALANCE());
 
        return oracleStatementDetailList;
    }
