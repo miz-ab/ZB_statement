@@ -220,6 +220,10 @@ public class ExtractStatementService {
         log.info("opening balance {}", s.getOPENING_BALANCE());
         log.info("closing balance {}", s.getCLOSING_BALANCE());
 
+        double sum = (s.getOPENING_BALANCE() + sum_credit_amt) - sum_debit_amt;
+
+        log.info("closing amt  and sum value {},{}", s.getCLOSING_BALANCE(),sum);
+
        return oracleStatementDetailList;
    }
 
