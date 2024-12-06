@@ -112,26 +112,10 @@ public class MainController {
         }
     }
 
-    @PostMapping("/aa")
-    public String getreq(@RequestBody T res){
-        log.info("passed value {} ", res);
-        String res_ = "";
-        try{
-            res_ = serviceCaller.callStatement(res);
-            System.out.println(res_);
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
-
-        return res_;
-    }
-
     @PostMapping("/get-balance")
     public AccountBalanceResponse getBalance(@RequestBody AccountBalance b){
         try{
-            AccountBalanceResponse aa = serviceCaller.bankStatementBalance(b);
-            log.info("res {}", aa.getSTATUS());
-            return aa;
+            return  serviceCaller.bankStatementBalance(b);
         }catch (Exception e){
             log.error(e.getMessage());
         }
