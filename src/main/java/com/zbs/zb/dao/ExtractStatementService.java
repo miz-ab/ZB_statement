@@ -162,16 +162,19 @@ public class ExtractStatementService {
     public List<OracleStatementDetail> get_oracle_statement_detail(Statement s){
 
        String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
+
        log.info("db date and id {} ", db_date_and_id_val);
        String db_id = db_date_and_id_val.split("@")[0];
-       String db_date = db_date_and_id_val.split("@")[1];
+       String db_date = statementService.getStatementLineInterfaceIdAndLatestDate().equals("-1") ?
+               "-1" : statementService.getStatementLineInterfaceIdAndLatestDate().split("@")[1];
+        //String db_date = db_date_and_id_val.split("@")[1];
        String api_date = s.getSTATEMENT_PERIOD().split(" - ")[0];
 
 
        log.info("db date {}", db_date);
        log.info("api date {}", api_date);
         log.info("db id {}", db_id);
-       int get_date_comparison = statementService.compareDate_(db_date, api_date);
+       int get_date_comparison = db_date.equals("-1")? DAY_MONTH_DIFFERENCE :  statementService.compareDate_(db_date, api_date);
 
        int new_line_no = get_date_comparison == DAY_MONTH_DIFFERENCE ? 0 : Integer.parseInt(statementService.get_statement_interface_line_number());
        log.info("line no {} ", new_line_no);

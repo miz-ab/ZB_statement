@@ -192,6 +192,26 @@ public class StatementService {
             System.out.println(e);
         }
 
+        return  result.get();
+    }
+
+    public String getStatementLineInterfaceIdAndLatestDate(){
+        /*
+            return latest date and statement line id
+         */
+        AtomicReference<String> result = new AtomicReference<>("-1");
+        try {
+            String sql = "SELECT LINE_NUMBER, TRX_DATE FROM CE_STATEMENT_LINES_INTERFACE ORDER BY TRX_DATE DESC FETCH FIRST 1 ROW ONLY";
+
+            secondaryJdbcTemplate.query(sql, rs -> {
+                result.set(rs.getString("LINE_NUMBER") + "@" + rs.getDate("TRX_DATE").toString());
+            });
+
+            return result.get();
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+
         System.out.println("statement number and last in date " + result.get());
         return  result.get();
     }

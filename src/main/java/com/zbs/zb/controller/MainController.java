@@ -133,6 +133,9 @@ public class MainController {
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_date = db_date_val.split("@")[1];
 
+        log.info("date_c {}", db_date);
+        log.info("date_a {}", api_date);
+
         int r = statementService.compareDate_(db_date, api_date.split(" - ")[0]);
         return statementService.compareDate_(db_date, api_date.split(" - ")[0]);
    }
