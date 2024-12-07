@@ -28,6 +28,8 @@ public class ExtractStatementService {
     @Autowired
     private StatementService statementService;
 
+
+
    public com.zbs.zb.db_model.Statement get_statement(Statement s){
         UUID statement_uuid = UUID.randomUUID();
         return new
@@ -162,11 +164,17 @@ public class ExtractStatementService {
        String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
        log.info("db date and id {} ", db_date_and_id_val);
        String db_id = db_date_and_id_val.split("@")[0];
-       log.info("db id {}", db_id);
+       String db_date = db_date_and_id_val.split("@")[1];
+       String api_date = s.getSTATEMENT_PERIOD().split(" - ")[0];
 
-       int new_line_no = Integer.parseInt(statementService.get_statement_interface_line_number());
-       //log.info("line no {} ", new_line_no);
 
+       log.info("db date {}", db_date);
+       log.info("api date {}", api_date);
+        log.info("db id {}", db_id);
+       int get_date_comparison = statementService.compareDate_(db_date, api_date);
+
+       int new_line_no = get_date_comparison == DAY_MONTH_DIFFERENCE ? 0 : Integer.parseInt(statementService.get_statement_interface_line_number());
+       log.info("line no {} ", new_line_no);
 
        List<OracleStatementDetail> oracleStatementDetailList = new ArrayList<>();
 
