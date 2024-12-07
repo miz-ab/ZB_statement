@@ -251,10 +251,16 @@ public class ExtractStatementService {
     public OracleStatement get_oracle_statement(Statement s){
         String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_id = db_date_and_id_val.split("@")[0];
-        String new_id = String.valueOf(Integer.parseInt(db_id) + 1);
+        String parsed_id = db_id.replaceAll(KEEP_ONLY_DEGIT, "");
+        String new_id = String.valueOf(Integer.parseInt(parsed_id) + 1);
+
+        /*
+        * change, add "i" value in the statement id field new id will be like 10005i
+        * i stands for interface
+        * */
 
         return new OracleStatement(
-                new_id,
+                new_id + "i",
                 s.getACCOUNT_NUMBER(),
                 s.getSTATEMENT_PERIOD().split(" - ")[0],
                 "Zemen Bank",

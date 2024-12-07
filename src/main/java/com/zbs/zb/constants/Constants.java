@@ -13,7 +13,7 @@ public class Constants {
     public static final String DEFAULT_INST_NO = "222";
     public static final String ETB_CCY = "ETB";
     public static final String ORG_ID = "101";
-    public static final String RECORD_STATUS_FLAG = "T";
+    public static final String RECORD_STATUS_FLAG = "N";
 
     public static final Integer BOTH_DATES_ARE_EQUAL = 0;
     public static final Integer DAY_DIFFERENCE = 1;
@@ -23,6 +23,9 @@ public class Constants {
     //USE ENV VARIABLE FOR TESTING / PROD
     public static final String HOST_USERNAME = "icl";
     public static final String HOST_PASSWORD = "P@ssw0rd";
+
+
+    public static final String KEEP_ONLY_DEGIT = "[^\\d]";
 
 
 }
