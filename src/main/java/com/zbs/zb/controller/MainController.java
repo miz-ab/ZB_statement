@@ -44,19 +44,6 @@ public class MainController {
             log.info("response {} ", statement_response);
 
             /* insert to mysql database */
-
-            /*
-            com.zbs.zb.db_model.Statement statement = extractStatementService.get_statement(statement_response);
-            List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail_for_mysql(statement_response);
-            String return_ = statementService.insertStatementData(statement);
-            log.info("statement {}", statement);
-            log.info("db status code {}", return_);
-
-            for(StatementDetail statementDetail : statementDetailList) {
-                statementService.insertStatementDetailData(statementDetail);
-            }
-            */
-
             log.info("api date {} ", statement_response.getSTATEMENT_PERIOD());
             int status = get_date_comparison_value(statement_response.getSTATEMENT_PERIOD());
             log.info("date status {}", status);
@@ -66,8 +53,17 @@ public class MainController {
             * 1 add only line
             * */
 
+            /*
+            * change, add statement header interface regardless of the day difference,
+            * add statement data for each request
+            * */
+
             if(status == 1){
-                /* add statement line only */
+                /* add statement line and statement interface (new change) */
+                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
+                log.info("statement int case 1{} ", oracleStatement_);
+                statementService.insertStatementOracleDB(oracleStatement_);
+
                 List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
                 log.info(" oracle statement detail list {} ", oracleStatementDetailList);
                 //List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
@@ -84,7 +80,7 @@ public class MainController {
             }else if(status == 2){
                 /* add both statement header and line and statement and statement detail list */
                 OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
-                log.info("oracle statement int{} ", oracleStatement_);
+                log.info("statement int case 2{} ", oracleStatement_);
                 statementService.insertStatementOracleDB(oracleStatement_);
                 List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
                 log.info("detail list oracle {} ", oracleStatementDetailList);
