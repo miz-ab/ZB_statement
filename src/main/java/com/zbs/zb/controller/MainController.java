@@ -36,10 +36,11 @@ public class MainController {
     * */
     @PostMapping("/post-statement")
     //@Scheduled(fixedRate = 60000)
-    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody StatementRequest s){
+    //change StatementRequest -> Statement
+    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody Statement statement_response){
         try{
             Map<String, Object> response = new HashMap<>();
-            Statement statement_response = serviceCaller.bankStatement(s);
+            //Statement statement_response = serviceCaller.bankStatement(s);
 
             log.info("response {} ", statement_response);
 
