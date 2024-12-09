@@ -1,5 +1,6 @@
 package com.zbs.zb.controller;
 
+import com.zbs.zb.dao.DssService;
 import com.zbs.zb.dao.ExtractStatementService;
 import com.zbs.zb.dao.ServiceCaller;
 import com.zbs.zb.dao.StatementService;
@@ -28,6 +29,9 @@ public class MainController {
 
     @Autowired
     private ServiceCaller serviceCaller;
+
+    @Autowired
+    DssService dssService;
 
     @Autowired
     ExtractStatementService extractStatementService;
@@ -127,6 +131,12 @@ public class MainController {
             log.error(e.getMessage());
         }
         return null;
+    }
+
+    @PostMapping("/get-cli-tkn")
+    public String getToken(@RequestBody Login l){
+        dssService.getToken(l);
+        return "a";
     }
 
    private int get_date_comparison_value(String api_date){

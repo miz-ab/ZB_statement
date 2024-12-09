@@ -4,7 +4,7 @@ public class Constants {
 
     public static final String EXTERNAL_HOST_ADDRESS = "https://devapi.zemenbank.com/statement-service";
     public static final String EXTERNAL_HOST_ADDRESS_2 = "http://127.0.0.1:3012";
-    public static final String DSS_HOST = "https://backendtest.iclpartner.com/api/login";
+    public static final String DSS_HOST = "https://backendtest.iclpartner.com/api";
     public static final String FIRST_DAY_OF_THE_MONTH = "01";
     public static final String CHAR_NUMERIC = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     public static final String CREDIT_VALUE_CODE = "CRE";

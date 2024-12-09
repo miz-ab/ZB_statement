@@ -1,5 +1,7 @@
 package com.zbs.zb.dao;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.zbs.zb.model.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -33,6 +35,20 @@ public class DssService {
                 .body(l)
                 .retrieve()
                 .body(String.class);
-        return response;
+
+        try{
+            if(response != null){
+                JsonObject root = JsonParser.parseString(response).getAsJsonObject();
+                String tkn = root.getAsJsonObject("data").get("accessToken").getAsString();
+                log.info("tkn {}", tkn);
+                return tkn;
+
+            }
+
+
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
+        return "";
     }
 }
