@@ -27,8 +27,8 @@ public class Constants {
     public static final String HOST_USERNAME = "icl";
     public static final String HOST_PASSWORD = "P@ssw0rd";
 
-    public static final String DSS_EMAIL = "admin@admin.com";
-    public static final String DSS_PASSWORD = "CP@dmin852";
+    public static final String CLI_EMAIL = "admin@admin.com";
+    public static final String CLI_PASSWORD = "CP@dmin852";
 
 
     public static final String KEEP_ONLY_DEGIT = "[^\\d]";

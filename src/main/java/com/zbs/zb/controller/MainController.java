@@ -133,12 +133,6 @@ public class MainController {
         return null;
     }
 
-    @PostMapping("/get-cli-tkn")
-    public String getToken(@RequestBody Login l){
-        dssService.getToken(l);
-        return "a";
-    }
-
    private int get_date_comparison_value(String api_date){
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_date = db_date_val.split("@")[1];

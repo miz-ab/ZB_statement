@@ -2,6 +2,8 @@ package com.zbs.zb.dao;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.zbs.zb.cli_model.SummaryReport;
+import com.zbs.zb.cli_model.summaryRequest;
 import com.zbs.zb.model.Login;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,26 +28,29 @@ public class DssService {
                 .build();
     }
 
-    public String getToken(Login l){
+    public String getToken(){
+        String tknResponse = null;
         String response = restClient.post()
                 .uri("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .body(l)
+                .body(new Login(CLI_EMAIL, CLI_PASSWORD))
                 .retrieve()
                 .body(String.class);
-
         try{
             if(response != null){
                 JsonObject root = JsonParser.parseString(response).getAsJsonObject();
-                String tkn = root.getAsJsonObject("data").get("accessToken").getAsString();
-                log.info("tkn {}", tkn);
-                return tkn;
+                tknResponse = root.getAsJsonObject("data").get("accessToken").getAsString();
             }
         }catch (Exception e){
             log.error(e.getMessage());
         }
-        return null;
+        return tknResponse;
+    }
+
+    public SummaryReport getSummaryReport(summaryRequest summaryRequest){
+        String tkn = getToken();
+
     }
 
 
