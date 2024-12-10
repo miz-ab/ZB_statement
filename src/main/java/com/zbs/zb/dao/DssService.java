@@ -11,7 +11,6 @@ import org.springframework.web.client.RestClient;
 import java.util.Base64;
 
 import static com.zbs.zb.constants.Constants.*;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 @Service
 @Slf4j
@@ -42,13 +41,12 @@ public class DssService {
                 String tkn = root.getAsJsonObject("data").get("accessToken").getAsString();
                 log.info("tkn {}", tkn);
                 return tkn;
-
             }
-
-
         }catch (Exception e){
             log.error(e.getMessage());
         }
-        return "";
+        return null;
     }
+
+
 }

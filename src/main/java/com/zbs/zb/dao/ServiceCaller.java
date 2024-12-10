@@ -48,7 +48,6 @@ public class ServiceCaller {
 
     @Retryable(value = { IOException.class }, maxAttempts = 5, backoff = @Backoff(delay = 5000))
     public Statement getStatement() {
-        System.out.println("trying "+ new Date());
         return restClient.get()
                 .uri("/get-statement")
                 .retrieve()
