@@ -9,11 +9,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-
 import java.util.Base64;
-
 import static com.zbs.zb.constants.Constants.*;
 import org.springframework.http.MediaType;
+
 @Service
 @Slf4j
 public class DssService {
@@ -48,10 +47,21 @@ public class DssService {
         return tknResponse;
     }
 
+    /*
     public SummaryReport getSummaryReport(summaryRequest summaryRequest){
         String tkn = getToken();
-
+        log.info("token {}", tkn);
+        if(tkn != null){
+            return restClient.get()
+                    .uri("/reports/do-daily-financial-summary-report")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + tkn)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(summaryRequest)
+                    .retrieve()
+                    .body(SummaryReport.class);
+        }
+        return null;
     }
-
-
+    */
 }

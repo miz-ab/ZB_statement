@@ -1,5 +1,7 @@
 package com.zbs.zb.controller;
 
+import com.zbs.zb.cli_model.SummaryReport;
+import com.zbs.zb.cli_model.summaryRequest;
 import com.zbs.zb.dao.DssService;
 import com.zbs.zb.dao.ExtractStatementService;
 import com.zbs.zb.dao.ServiceCaller;
@@ -96,23 +98,35 @@ public class MainController {
                         log.info("detail list DB response interface {} ", b);
                     }
                 }
-
                 response.put("statement_header", oracleStatement_);
                 response.put("statement_detail", oracleStatementDetailList);
                 response.put("statement created successfully", oracleStatementDetailList.size());
-
-
             }else{
                 response.put("statement_detail", "Invalid Data");
             }
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 
         } catch (Exception e) {
-            System.out.println("err " + e.getMessage());
+            log.error(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    /*
+    @PostMapping("/get-cli-summary-report")
+    public ResponseEntity<Map<String, Object>> SavePostDataService(@RequestBody summaryRequest summaryRequest){
+            try{
+                Map<String, Object> response = new HashMap<>();
+                SummaryReport res = dssService.getSummaryReport(summaryRequest);
+                log.info("summary response {}", res);
+                response.put("res ", res);
+                return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            }catch (Exception e){
+                log.error(e.getMessage());
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+    }
+    */
     @PostMapping("/get-balance")
     public AccountBalanceResponse getBalance(@RequestBody AccountBalance b){
         try{
