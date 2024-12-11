@@ -1,7 +1,6 @@
 package com.zbs.zb.controller;
 
-import com.zbs.zb.cli_model.SummaryReport;
-import com.zbs.zb.cli_model.summaryRequest;
+
 import com.zbs.zb.dao.DssService;
 import com.zbs.zb.dao.ExtractStatementService;
 import com.zbs.zb.dao.ServiceCaller;
@@ -65,44 +64,27 @@ public class MainController {
             * add statement data for each request
             * */
 
-            if(status == 1){
-                /* add statement line and statement interface (new change) */
-                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
-                log.info("statement int case 1{} ", oracleStatement_);
-                statementService.insertStatementOracleDB(oracleStatement_);
+            switch (status) {
+                case 1, 2 -> {
+                    /* add statement line and statement interface (new change) */
+                    OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
+                    log.info("statement int case 1{} ", oracleStatement_);
+                    statementService.insertStatementOracleDB(oracleStatement_);
 
-                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
-                log.info(" oracle statement detail list {} ", oracleStatementDetailList);
-                //List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
+                    List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
+                    log.info(" oracle statement detail list {} ", oracleStatementDetailList);
+                    //List<StatementDetail> statementDetailList = extractStatementService.get_statement_detail(s);
 
-                /* insert to oracle database */
-                for(OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
-                    String a = statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-                    log.info("oracle statement detail list DB response {} ", a);
-                }
-
-                response.put("statement_detail", oracleStatementDetailList);
-                response.put("statement created successfully", oracleStatementDetailList.size());
-
-            }else if(status == 2){
-                /* add both statement header and line and statement and statement detail list */
-                OracleStatement oracleStatement_ = extractStatementService.get_oracle_statement(statement_response);
-                log.info("statement int case 2{} ", oracleStatement_);
-                statementService.insertStatementOracleDB(oracleStatement_);
-                List<OracleStatementDetail> oracleStatementDetailList = extractStatementService.get_oracle_statement_detail(statement_response);
-                log.info("detail list oracle {} ", oracleStatementDetailList);
-
-                if(oracleStatementDetailList != null) {
+                    /* insert to oracle database */
                     for (OracleStatementDetail oracleStatementDetail : oracleStatementDetailList) {
-                        String b = statementService.insertStatementDetailOracleDB(oracleStatementDetail);
-                        log.info("detail list DB response interface {} ", b);
+                        String a = statementService.insertStatementDetailOracleDB(oracleStatementDetail);
+                        log.info("oracle statement detail list DB response {} ", a);
                     }
+
+                    response.put("statement_detail", oracleStatementDetailList);
+                    response.put("statement created successfully", oracleStatementDetailList.size());
                 }
-                response.put("statement_header", oracleStatement_);
-                response.put("statement_detail", oracleStatementDetailList);
-                response.put("statement created successfully", oracleStatementDetailList.size());
-            }else{
-                response.put("statement_detail", "Invalid Data");
+                default -> response.put("statement_detail", "Invalid Data");
             }
             return new ResponseEntity<>(response, HttpStatus.CREATED);
 

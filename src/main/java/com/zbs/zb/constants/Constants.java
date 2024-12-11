@@ -31,7 +31,7 @@ public class Constants {
     public static final String CLI_PASSWORD = "CP@dmin852";
 
 
-    public static final String KEEP_ONLY_DEGIT = "[^\\d]";
+    public static final String KEEP_ONLY_DIGIT = "[^\\d]";
 
 
 }

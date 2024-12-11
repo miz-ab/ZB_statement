@@ -153,12 +153,6 @@ public class ExtractStatementService {
 //       return oracleStatementDetailList;
 //   }
 
-
-
-
-
-
-
     public List<OracleStatementDetail> get_oracle_statement_detail(Statement s){
 
        String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
@@ -262,7 +256,7 @@ public class ExtractStatementService {
     public OracleStatement get_oracle_statement(Statement s){
         String db_date_and_id_val = statementService.getStatementHeaderIdAndLatestDate();
         String db_id = db_date_and_id_val.split("@")[0];
-        String parsed_id = db_id.replaceAll(KEEP_ONLY_DEGIT, "");
+        String parsed_id = db_id.replaceAll(KEEP_ONLY_DIGIT, "");
         String new_id = String.valueOf(Integer.parseInt(parsed_id) + 1);
 
         /*
