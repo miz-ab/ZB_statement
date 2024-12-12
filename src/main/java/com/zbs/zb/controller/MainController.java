@@ -1,10 +1,7 @@
 package com.zbs.zb.controller;
 
 
-import com.zbs.zb.dao.DssService;
-import com.zbs.zb.dao.ExtractStatementService;
-import com.zbs.zb.dao.ServiceCaller;
-import com.zbs.zb.dao.StatementService;
+import com.zbs.zb.dao.*;
 import com.zbs.zb.db_model.OracleStatement;
 import com.zbs.zb.db_model.OracleStatementDetail;
 import com.zbs.zb.db_model.StatementDetail;
@@ -33,6 +30,9 @@ public class MainController {
 
     @Autowired
     DssService dssService;
+
+    @Autowired
+    EmailService emailService;
 
     @Autowired
     ExtractStatementService extractStatementService;
@@ -128,6 +128,13 @@ public class MainController {
         }
         return null;
     }
+
+    @PostMapping("/send-mail")
+    public void sendMail(@RequestBody Mail mail){
+        log.info("mail " + mail);
+        emailService.sendEmail(mail);
+    }
+
 
    private int get_date_comparison_value(String api_date){
         String db_date_val = statementService.getStatementHeaderIdAndLatestDate();
