@@ -13,6 +13,8 @@ public class Constants {
 
     public static final String ABINET_BRANCH_ACCOUNT_NO = "1334110027363015";
     public static final String ABINET_BRANCH_NAME = "Abinet Branch";
+    public static final String NOT_FOUND = "NOT_FOUND";
+    public static final Integer NOT_FOUND_INT = -1;
     public static final String DEFAULT_INST_NO = "222";
     public static final String ETB_CCY = "ETB";
     public static final String ORG_ID = "101";
