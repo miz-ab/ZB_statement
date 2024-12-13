@@ -1,5 +1,6 @@
 package com.zbs.zb.util;
 
+import com.zbs.zb.model.Bank;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,18 +32,18 @@ public class Util {
         return branchId.get();
     }
 
-    public String getBankBranchName(String bankBranchId){
-        AtomicReference<String> branchName = new AtomicReference<>(NOT_FOUND);
+    public Bank getBankNameBranch(String bankBranchId){
+        Bank bank = new Bank();
         try{
-            String sql = "SELECT BANK_BRANCH_NAME FROM CE_BANK_BRANCHES_V WHERE BRANCH_PARTY_ID = ?";
+            String sql = "SELECT BANK_BRANCH_NAME, BANK_NAME FROM CE_BANK_BRANCHES_V WHERE BRANCH_PARTY_ID = ?";
             secondaryJdbcTemplate.query(sql, new Object[]{bankBranchId}, rs -> {
-                branchName.set(rs.getString("BANK_BRANCH_NAME"));
+                bank.setBankName(rs.getString("BANK_NAME"));
+                bank.setBankBranchName(rs.getString("BANK_BRANCH_NAME"));
             });
-            return branchName.get();
         }catch (Exception e){
             log.error("error get branch Name {}", e.getMessage());
         }
-        return branchName.get();
+        return bank;
     }
 
 
