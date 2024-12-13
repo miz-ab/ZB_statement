@@ -1,50 +1,51 @@
 package com.zbs.zb.util;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDate;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.zbs.zb.constants.Constants.*;
 
+@Slf4j
+@Service
 public class Util {
-    public int compareDate__(String db_date, String api_date){
-        /*
-         * 0 => exact the same date
-         * 1 => just add statement line, ignore statement header
-         * 2 => add both statement header and statement line
-         * 3 => invalid date
-         * */
-        String[] db_date_arr = db_date.split("-");
-        String[] api_date_arr = api_date.split("-");
 
-        LocalDate db_local_date_format = LocalDate.of(Integer.parseInt(db_date_arr[0]), Integer.parseInt(db_date_arr[1]), Integer.parseInt(db_date_arr[2]));
-        LocalDate api_local_date_format = LocalDate.of(Integer.parseInt(api_date_arr[0]),Integer.parseInt(api_date_arr[1]),Integer.parseInt(api_date_arr[2]));
+    @Autowired
+    private JdbcTemplate secondaryJdbcTemplate;
 
-        if(db_date.equals(api_date)){
-            return BOTH_DATES_ARE_EQUAL;
+    public Integer getBankBranchId(String accountNumber) {
+        AtomicReference<Integer> branchId = new AtomicReference<>(-1);
+        try{
+            String sql = "SELECT BANK_BRANCH_ID FROM CE_BANK_ACCOUNTS WHERE BANK_ACCOUNT_NUM = ?";
+
+            secondaryJdbcTemplate.query(sql, new Object[]{accountNumber}, rs -> {
+                branchId.set(rs.getInt("BANK_BRANCH_ID"));
+            });
+            return branchId.get();
+        }catch (Exception e){
+            log.error("error get branch ID {}", e.getMessage());
         }
-
-        if(db_local_date_format.getYear() != api_local_date_format.getYear()){
-            return INVALID_DATE;
-        }
-
-        /*
-         * if api day is greater than db day (day only)
-         * */
-
-        if((api_local_date_format.getMonthValue() == db_local_date_format.getMonthValue()) && (api_local_date_format.getDayOfMonth() > db_local_date_format.getDayOfMonth())){
-            return DAY_DIFFERENCE;
-        }
-
-        /*
-         * if api date is one month after db date and api day of the month is start day of the month
-         * create new statement header record
-         *
-         * add both statement interface header and statement header line
-         * */
-        if((db_local_date_format.plusMonths(1).getMonth() == api_local_date_format.getMonth()) &&
-                (api_local_date_format.getDayOfMonth() == 1)){
-            return DAY_MONTH_DIFFERENCE;
-        }
-
-        return INVALID_DATE;
+        return branchId.get();
     }
-}
+
+    public String getBankBranchName(String bankBranchId){
+        AtomicReference<String> branchName = new AtomicReference<>("not found");
+        try{
+            String sql = "SELECT BANK_BRANCH_NAME FROM CE_BANK_BRANCHES_V WHERE BRANCH_PARTY_ID = ?";
+            secondaryJdbcTemplate.query(sql, new Object[]{bankBranchId}, rs -> {
+                branchName.set(rs.getString("BANK_BRANCH_NAME"));
+            });
+            return branchName.get();
+        }catch (Exception e){
+            log.error("error get branch Name {}", e.getMessage());
+        }
+        return branchName.get();
+    }
+
+
+    }
+
